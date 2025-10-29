@@ -43,47 +43,27 @@
                 <form @submit.prevent="submitReview" class="review-form">
                     <div class="form-group">
                         <label for="name">Имя:</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            v-model="newReview.name" 
-                            required 
-                            placeholder="Введите ваше имя"
-                        >
+                        <input type="text" id="name" v-model="newReview.name" required placeholder="Введите ваше имя">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="location">Местоположение:</label>
-                        <input 
-                            type="text" 
-                            id="location" 
-                            v-model="newReview.location" 
-                            required 
-                            placeholder="Введите ваше местоположение"
-                        >
+                        <input type="text" id="location" v-model="newReview.location" required
+                            placeholder="Введите ваше местоположение">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="description">Отзыв:</label>
-                        <textarea 
-                            id="description" 
-                            v-model="newReview.description" 
-                            required 
-                            rows="5"
-                            placeholder="Напишите ваш отзыв"
-                        ></textarea>
+                        <textarea id="description" v-model="newReview.description" required rows="5"
+                            placeholder="Напишите ваш отзыв"></textarea>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="avatar">Аватар (URL):</label>
-                        <input 
-                            type="url" 
-                            id="avatar" 
-                            v-model="newReview.avatar" 
-                            placeholder="Введите URL аватара (опционально)"
-                        >
+                        <input type="url" id="avatar" v-model="newReview.avatar"
+                            placeholder="Введите URL аватара (опционально)">
                     </div>
-                    
+
                     <div class="form-actions">
                         <button type="button" @click="closeModal" class="btn-cancel">Отмена</button>
                         <button type="submit" class="btn-submit">Добавить отзыв</button>
@@ -137,18 +117,29 @@ export default {
         slideGroups() {
             const customersFromLocalStorage = localStorage.getItem('reviews') && JSON.parse(localStorage.getItem('reviews')).length ? JSON.parse(localStorage.getItem('reviews')) : []
             let customers = customersFromLocalStorage.concat(this.customers)
-            
-            if (customers.length <= 3) {
-                return [customers];
+
+            const uniqueCustomers = [];
+            const seen = new Set();
+
+            for (const customer of customers) {
+                const key = `${customer.name}|${customer.location}|${customer.description}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueCustomers.push(customer);
+                }
             }
-            
+
+            if (uniqueCustomers.length <= 3) {
+                return [uniqueCustomers];
+            }
+
             const groups = [];
             const cardsPerSlide = 3;
-            
-            for (let i = 0; i < customers.length; i += cardsPerSlide) {
-                groups.push(customers.slice(i, i + cardsPerSlide));
+
+            for (let i = 0; i < uniqueCustomers.length; i += cardsPerSlide) {
+                groups.push(uniqueCustomers.slice(i, i + cardsPerSlide));
             }
-            
+
             return groups;
         },
         trackStyle() {
@@ -194,19 +185,19 @@ export default {
                 location: this.newReview.location,
                 description: this.newReview.description
             }
+
             this.customers.unshift(newReview);
 
             this.closeModal();
             this.currentSlide = 0;
 
-            if(localStorage.getItem('reviews') && JSON.parse(localStorage.getItem('reviews'))?.length) {
+            if (localStorage.getItem('reviews') && JSON.parse(localStorage.getItem('reviews'))?.length) {
                 let reviews = JSON.parse(localStorage.getItem('reviews'))
                 reviews.unshift(newReview)
                 localStorage.setItem('reviews', JSON.stringify(reviews))
             } else {
                 localStorage.setItem('reviews', JSON.stringify([newReview]))
             }
-            
         }
     }
 }
@@ -521,11 +512,11 @@ export default {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .cards.two-cards {
         justify-content: flex-start;
     }
-    
+
     .card,
     .card-placeholder {
         max-width: 100%;
