@@ -88,30 +88,19 @@
         </div>
 
         <div class="our-customers">
-            <Title :title="'OUR CUSTOMERS'" />
-
-            <div class="cards">
-                <div class="card" v-for="value in 3">
-                    <div class="user-info">
-                        <div class="avatar"><img src="/img/main/avatar.png" alt="avatar"></div>
-                        <div class="dop">
-                            <div class="name">Khutiev A.</div>
-                            <div class="location">Russia, Republic of Ingushetia</div>
-                        </div>
-                    </div>
-                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
-                </div>
-            </div>
+            <Reviews />
         </div>
     </main>
 </template>
 
 <script>
 import Title from './Title.vue';
+import Reviews from './reviews.vue';
 
 export default {
     components: {
-        Title
+        Title,
+        Reviews
     },
     methods: {
         scrollToCollection() {
@@ -418,56 +407,6 @@ export default {
         width: 300px;
         font-size: 25px;
         font-weight: 600;
-    }
-}
-
-.our-customers .cards {
-    width: 94%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 auto;
-}
-
-.our-customers .card {
-    padding: 50px;
-    width: 570px;
-    background-color: #fff;
-    border-bottom: 5px solid #FF9AE96d;
-    border-radius: 15px;
-
-    .avatar {
-        border-radius: 50%;
-        overflow: hidden;
-            width: 70px;
-            height: 70px;
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-    }
-
-    .dop {
-        margin-left: 20px;
-    }
-
-    .name {
-        font-size: 25px;
-        font-weight: 600;
-    }
-
-    .location {
-        font-size: 18px;
-    }
-
-    .description {
-        margin-top: 20px;
     }
 }
 </style>
